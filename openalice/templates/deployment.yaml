@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openalice
+  namespace: "{{ .Release.Namespace }}"
+  labels:
+    io.kompose.service: openalice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: openalice
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: openalice
+    spec:
+      initContainers:
+        - name: init-chmod-data
+          image: "docker.io/beclab/aboveos-busybox:1.37.0"
+          command:
+            - sh
+            - "-c"
+            - |
+              mkdir -p /data
+              chown -R 1000:1000 /data
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          securityContext:
+            runAsUser: 0
+      containers:
+        - name: openalice
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 3002
+          env:
+            - name: TZ
+              value: Etc/UTC
+          resources:
+            requests:
+              cpu: 256m
+              memory: 384Mi
+            limits:
+              cpu: 1000m
+              memory: 2Gi
+          volumeMounts:
+            - name: data
+              mountPath: /app/data
+          startupProbe:
+            httpGet:
+              path: /
+              port: 3002
+              scheme: HTTP
+            initialDelaySeconds: 45
+            periodSeconds: 10
+            failureThreshold: 36
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3002
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            failureThreshold: 5
+      volumes:
+        - name: data
+          hostPath:
+            path: '{{ .Values.userspace.appData | default "" }}/{{ .Release.Name }}/openalice'
+            type: DirectoryOrCreate
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: openalice
+  namespace: {{ .Release.Namespace }}
+  labels:
+    io.kompose.service: openalice
+spec:
+  ports:
+    - name: http
+      port: 3002
+      targetPort: 3002
+  selector:
+    io.kompose.service: openalice

@@ -1,0 +1,70 @@
+---
+olaresManifest.version: "0.10.0"
+olaresManifest.type: app
+apiVersion: "v2"
+metadata:
+  name: openalice
+  icon: https://raw.githubusercontent.com/TraderAlice/OpenAlice/master/ui/public/alice.ico
+  description: File-driven AI trading agent for crypto and securities markets.
+  appid: openalice
+  title: Open Alice
+  version: "1.0.0"
+  categories:
+    - Utilities
+
+entrances:
+  - name: openalice
+    port: 3002
+    host: openalice
+    title: Open Alice
+    icon: https://raw.githubusercontent.com/TraderAlice/OpenAlice/master/ui/public/alice.ico
+    authLevel: private
+    openMethod: window
+
+spec:
+  versionName: "0.9.0-beta.6"
+  fullDescription: |
+    Open Alice is a file-driven AI trading agent that gives you your own research
+    desk, quant team, and trading floor — all running 24/7.
+
+    Features:
+    - File-driven: Markdown defines persona and tasks, JSON defines config. No database, just files.
+    - Multi-provider AI: Claude (Agent SDK) or Vercel AI SDK (Anthropic, OpenAI, Google) switchable at runtime.
+    - Unified Trading Account (UTA): Trading-as-Git workflow (stage, commit, push) with guards.
+    - Market data via OpenBB, news RSS, equity research, cron scheduling, and Web UI chat.
+
+    Open this app to use the Web UI (port 3002). Default setup can use local Claude Code login.
+    Config lives under app data in data/config/ (e.g. ai-provider.json, platforms.json, accounts.json).
+  upgradeDescription: |
+    Initial Olares package.
+  developer: TraderAlice
+  website: https://traderalice.com
+  sourceCode: https://github.com/TraderAlice/OpenAlice
+  submitter: Olares
+  locale:
+    - en-US
+    - zh-CN
+  doc: https://github.com/TraderAlice/OpenAlice
+  license:
+    - text: AGPL-3.0-only
+      url: https://github.com/TraderAlice/OpenAlice/blob/master/LICENSE
+  requiredMemory: 512Mi
+  limitedMemory: 2Gi
+  requiredDisk: 512Mi
+  limitedDisk: 5Gi
+  requiredCpu: 500m
+  limitedCpu: "2"
+  supportArch:
+    - amd64
+    - arm64
+
+permission:
+  appData: true
+  appCache: true
+
+options:
+  apiTimeout: 0
+  dependencies:
+    - name: olares
+      type: system
+      version: ">=1.12.2-0"
