@@ -1,0 +1,80 @@
+image:
+  repository: docker.io/goai007/worldmonitor
+  tag: "2.5.23"
+  pullPolicy: IfNotPresent
+
+# Companion images are split from the upstream compose stack.
+# If your workflow publishes different names or tags, update these two values.
+relayImage:
+  repository: docker.io/goai007/worldmonitor-ais-relay
+  tag: "2.5.23"
+  pullPolicy: IfNotPresent
+
+redisRestImage:
+  repository: docker.io/goai007/worldmonitor-redis-rest
+  tag: "2.5.23"
+  pullPolicy: IfNotPresent
+
+redisImage:
+  repository: docker.io/redis
+  tag: "7-alpine"
+  pullPolicy: IfNotPresent
+
+timezone: "Etc/UTC"
+
+service:
+  port: 3000
+  targetPort: 8080
+
+redis:
+  maxMemory: 256mb
+  storageSubPath: redis-data
+
+resources:
+  worldmonitor:
+    requests:
+      cpu: 500m
+      memory: 1024Mi
+    limits:
+      cpu: "2"
+      memory: 4Gi
+  relay:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+  redis:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+  redisRest:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+
+env:
+  # Optional upstream API keys. Leaving them empty keeps the app in degraded but usable public-data mode.
+  llmApiUrl: ""
+  llmApiKey: ""
+  llmModel: ""
+  groqApiKey: ""
+  openrouterApiKey: ""
+  aistreamApiKey: ""
+  finnhubApiKey: ""
+  eiaApiKey: ""
+  fredApiKey: ""
+  acledAccessToken: ""
+  nasaFirmsApiKey: ""
+  cloudflareApiToken: ""
+  aviationstackApi: ""
+
+userspace:
+  appData: ""

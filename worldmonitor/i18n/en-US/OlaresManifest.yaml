@@ -1,0 +1,17 @@
+metadata:
+  title: World Monitor
+  description: Real-time global intelligence dashboard with maps, briefs, and signal tracking.
+
+spec:
+  fullDescription: |
+    World Monitor is a real-time global intelligence dashboard for tracking geopolitics, markets, infrastructure, disasters, and OSINT signals in one interface.
+
+    It combines an interactive global map, AI-generated briefs, curated news feeds, and signal panels for military, cyber, finance, climate, and logistics events.
+
+    This package deploys the self-hosted stack used by the upstream Docker setup:
+    - Main web application
+    - Redis data store
+    - Upstash-compatible Redis REST proxy
+    - AIS relay sidecar
+
+    Optional API keys can be configured in values.yaml to unlock richer data sources.

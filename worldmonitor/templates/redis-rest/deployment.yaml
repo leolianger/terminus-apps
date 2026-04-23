@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worldmonitor-redis-rest
+  namespace: {{ .Release.Namespace }}
+  labels:
+    io.kompose.service: worldmonitor-redis-rest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: worldmonitor-redis-rest
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: worldmonitor-redis-rest
+    spec:
+      initContainers:
+        - name: wait-for-redis
+          image: "docker.io/beclab/aboveos-busybox:1.37.0"
+          command: ['sh', '-c', 'until nc -z worldmonitor-redis 6379; do echo "waiting for redis..."; sleep 2; done']
+      containers:
+        - name: worldmonitor-redis-rest
+          image: "docker.io/goai007/worldmonitor-redis-rest:2.5.23"
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 80
+          env:
+            - name: PORT
+              value: "80"
+            - name: SRH_CONNECTION_STRING
+              value: redis://worldmonitor-redis:6379
+            - name: SRH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: worldmonitor-env
+                  key: UPSTASH_REDIS_REST_TOKEN
+          resources:
+{{ toYaml .Values.resources.redisRest | indent 12 }}
+          startupProbe:
+            tcpSocket:
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 18
+          readinessProbe:
+            tcpSocket:
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 6
+          livenessProbe:
+            tcpSocket:
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 5
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: worldmonitor-redis-rest
+  namespace: {{ .Release.Namespace }}
+  labels:
+    io.kompose.service: worldmonitor-redis-rest
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+  selector:
+    io.kompose.service: worldmonitor-redis-rest

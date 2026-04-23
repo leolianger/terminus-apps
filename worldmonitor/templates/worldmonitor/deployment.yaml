@@ -1,0 +1,84 @@
+{{- $relayEnabled := ne (.Values.env.aistreamApiKey | default "" | trim) "" }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worldmonitor
+  namespace: {{ .Release.Namespace }}
+  labels:
+    io.kompose.service: worldmonitor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: worldmonitor
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: worldmonitor
+    spec:
+      containers:
+        - name: worldmonitor
+          image: "docker.io/goai007/worldmonitor:2.5.23"
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: {{ .Values.service.targetPort }}
+          envFrom:
+            - secretRef:
+                name: worldmonitor-env
+          env:
+            - name: TZ
+              value: {{ .Values.timezone | quote }}
+            - name: UPSTASH_REDIS_REST_URL
+              value: http://worldmonitor-redis-rest:80
+            - name: LOCAL_API_PORT
+              value: "46123"
+            - name: LOCAL_API_MODE
+              value: docker
+            - name: LOCAL_API_CLOUD_FALLBACK
+              value: "false"
+{{- if $relayEnabled }}
+            - name: WS_RELAY_URL
+              value: http://worldmonitor-ais-relay:3004
+{{- end }}
+          resources:
+{{ toYaml .Values.resources.worldmonitor | indent 12 }}
+          startupProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.targetPort }}
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 30
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.targetPort }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 6
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.service.targetPort }}
+            initialDelaySeconds: 20
+            periodSeconds: 30
+            failureThreshold: 5
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: worldmonitor
+  namespace: {{ .Release.Namespace }}
+  labels:
+    io.kompose.service: worldmonitor
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort }}
+  selector:
+    io.kompose.service: worldmonitor

@@ -1,0 +1,17 @@
+metadata:
+  title: World Monitor
+  description: 实时全球情报看板，聚合地图、AI 摘要与多类信号监控。
+
+spec:
+  fullDescription: |
+    World Monitor 是一个实时全球情报看板，用于在同一界面中追踪地缘政治、金融市场、基础设施、自然灾害与 OSINT 信号。
+
+    它整合了交互式全球地图、AI 生成摘要、精选新闻流，以及军事、网络安全、金融、气候与物流等多类信号面板。
+
+    这个打包目录部署的是上游 Docker 自托管方案对应的完整基础栈：
+    - 主 Web 应用
+    - Redis 数据存储
+    - 兼容 Upstash 的 Redis REST 代理
+    - AIS Relay 侧车服务
+
+    如需启用更多数据源能力，可在 values.yaml 中填写可选 API Key。
