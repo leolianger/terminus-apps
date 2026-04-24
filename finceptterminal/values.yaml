@@ -1,0 +1,28 @@
+# Upstream: https://github.com/Fincept-Corporation/FinceptTerminal
+# Image (explicit repository:tag per Olares packaging guide)
+#
+# If the container fails with: libqgeoview.so: cannot open shared object file
+# — QGeoView is built as a shared library next to the app; many Dockerfiles only
+# COPY the FinceptTerminal binary. Rebuild the runtime image from the same
+# builder stage, e.g. after "COPY ... FinceptTerminal":
+#   COPY --from=builder /src/build/linux-release/libqgeoview.so /app/
+# (path may match your preset output dir; also copy any other *.so from that dir
+# if the loader reports more missing libraries.) Then set extraEnv below so /app
+# is searched before Qt libs, e.g. LD_LIBRARY_PATH=/app:/opt/Qt/prefix/lib
+image:
+  repository: docker.io/goai007/finceptterminal
+  tag: "4.0.2"
+  pullPolicy: IfNotPresent
+
+# Optional extra env for the main container (e.g. LD_LIBRARY_PATH after fixing image)
+extraEnv: []
+
+# Olares entrance + probes on 8080; native Qt binary has no HTTP port (see README Docker + X11).
+imageGateway:
+  repository: docker.io/beclab/aboveos-bitnami-openresty
+  tag: "1.25.3-2"
+
+timezone: "Etc/UTC"
+
+userspace:
+  appData: ""

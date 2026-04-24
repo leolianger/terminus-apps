@@ -1,0 +1,9 @@
+metadata:
+  title: Fincept Terminal
+  description: CFA-level analytics, AI agents, and 100+ data connectors in a native Qt terminal.
+
+spec:
+  fullDescription: |
+    Fincept Terminal is a native C++20 / Qt6 financial intelligence platform: CFA-level analytics, embedded Python, 100+ data connectors, real-time trading, AI agents, and a visual node editor.
+
+    The default container image is a desktop binary (X11 / Qt xcb). For Docker, upstream recommends Linux with X11 (`DISPLAY` and `/tmp/.X11-unix`). This Olares chart runs that workload plus a small gateway on port 8080 for health and entrance routing; configure your environment for GUI access per upstream documentation.

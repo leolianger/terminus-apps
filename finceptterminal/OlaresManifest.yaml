@@ -1,0 +1,58 @@
+---
+olaresManifest.version: "0.11.0"
+olaresManifest.type: app
+metadata:
+  name: finceptterminal
+  icon: https://raw.githubusercontent.com/Fincept-Corporation/FinceptTerminal/main/fincept_icon.ico
+  description: CFA-level analytics, AI agents, and 100+ data connectors in a native Qt terminal.
+  appid: finceptterminal
+  title: Fincept Terminal
+  version: "1.0.0"
+  categories:
+    - Utilities
+    - Productivity_v112
+entrances:
+  - name: finceptterminal
+    port: 8080
+    host: finceptterminal
+    title: Fincept Terminal
+    icon: https://raw.githubusercontent.com/Fincept-Corporation/FinceptTerminal/main/fincept_icon.ico
+    authLevel: private
+    openMethod: window
+
+spec:
+  versionName: "4.0.2"
+  promoteImage:
+    - https://raw.githubusercontent.com/Fincept-Corporation/FinceptTerminal/main/images/Dashboard.png
+  fullDescription: |
+    Fincept Terminal is a native C++20 / Qt6 financial intelligence platform: CFA-level analytics, embedded Python, 100+ data connectors, real-time trading, AI agents, and a visual node editor.
+
+    The default container image is a desktop binary (X11 / Qt xcb). For Docker, upstream recommends Linux with X11 (`DISPLAY` and `/tmp/.X11-unix`). This Olares chart runs that workload plus a small gateway on port 8080 for health and entrance routing; configure your environment for GUI access per upstream documentation.
+
+  developer: Fincept Corporation
+  website: https://github.com/Fincept-Corporation/FinceptTerminal
+  sourceCode: https://github.com/Fincept-Corporation/FinceptTerminal
+  submitter: Olares
+  locale:
+    - en-US
+    - zh-CN
+  requiredMemory: 1280Mi
+  limitedMemory: 5Gi
+  requiredDisk: 512Mi
+  limitedDisk: 8Gi
+  requiredCpu: 600m
+  limitedCpu: "3"
+  supportArch:
+    - amd64
+    - arm64
+
+permission:
+  appData: true
+
+options:
+  allowMultipleInstall: true
+  apiTimeout: 0
+  dependencies:
+    - name: olares
+      type: system
+      version: ">=1.12.2-0"

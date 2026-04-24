@@ -1,0 +1,9 @@
+metadata:
+  title: Fincept Terminal
+  description: 原生 Qt 金融终端：CFA 级分析、AI 智能体与 100+ 数据连接器。
+
+spec:
+  fullDescription: |
+    Fincept Terminal 是一款原生 C++20 / Qt6 金融情报平台：CFA 级分析、内嵌 Python、100+ 数据连接器、实时交易、AI 智能体与可视化节点编排。
+
+    默认容器镜像是桌面端二进制（X11 / Qt xcb）。上游 Docker 说明建议在带 X11 的 Linux 上使用（`DISPLAY` 与 `/tmp/.X11-unix`）。本 Olares Chart 会运行该工作负载，并在 8080 端口附带轻量网关用于健康检查与入口路由；图形界面请按上游文档配置运行环境。
