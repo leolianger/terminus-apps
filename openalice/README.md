@@ -44,4 +44,5 @@ helm install openalice . -n YOUR_NAMESPACE --set userspace.appData=/path/to/appd
 
 ## 数据持久化
 
-应用数据（config、brain、sessions）存放在 `userspace.appData/{{ Release.Name }}/openalice`，在容器内挂载为 `/app/data`。
+
+应用数据（config、brain、sessions）落在该根路径下，在容器内挂载为 `/app/data`。

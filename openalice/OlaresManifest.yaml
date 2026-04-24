@@ -1,7 +1,6 @@
 ---
-olaresManifest.version: "0.10.0"
+olaresManifest.version: "0.11.0"
 olaresManifest.type: app
-apiVersion: "v2"
 metadata:
   name: openalice
   icon: https://raw.githubusercontent.com/TraderAlice/OpenAlice/master/ui/public/alice.ico

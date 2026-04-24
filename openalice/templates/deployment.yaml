@@ -69,7 +69,8 @@ spec:
       volumes:
         - name: data
           hostPath:
-            path: '{{ .Values.userspace.appData | default "" }}/{{ .Release.Name }}/openalice'
+            # Olares injects an app-scoped root; do not append release name or appid again (avoids appname/appname in UI).
+            path: '{{ .Values.userspace.appData | default "" }}'
             type: DirectoryOrCreate
       restartPolicy: Always
 ---
