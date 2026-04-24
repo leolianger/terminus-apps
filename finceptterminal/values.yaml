@@ -1,18 +1,22 @@
 # Upstream: https://github.com/Fincept-Corporation/FinceptTerminal
 # Image (explicit repository:tag per Olares packaging guide)
 #
-# If the container fails with: libqgeoview.so: cannot open shared object file
-# — QGeoView is built as a shared library next to the app; many Dockerfiles only
-# COPY the FinceptTerminal binary. Rebuild the runtime image from the same
-# builder stage, e.g. after "COPY ... FinceptTerminal":
-#   COPY --from=builder /src/build/linux-release/libqgeoview.so /app/
-# (path may match your preset output dir; also copy any other *.so from that dir
-# if the loader reports more missing libraries.) Then set extraEnv below so /app
-# is searched before Qt libs, e.g. LD_LIBRARY_PATH=/app:/opt/Qt/prefix/lib
+# This chart does NOT build the app — it only pulls `image.repository:tag`.
+# Point these at an image built from the repo-root Dockerfile (runtime stage must
+# install Mesa/EGL stack, e.g. libegl1 libgles2 libgbm1 — see FinceptTerminal Dockerfile).
+#
+# Common failures:
+#   • libqgeoview.so — image must COPY vendored *.so from build/linux-release into /app
+#   • libEGL.so.1 — image missing libegl1, OR the node still runs an old cached layer
+#     for this tag. Use pullPolicy: Always after you repush the same tag, or bump `tag`.
+#
+# Default registry is an example; replace with your CI-pushed image (Docker Hub user/repo).
 image:
   repository: docker.io/goai007/finceptterminal
-  tag: "4.0.2"
-  pullPolicy: IfNotPresent
+  tag: "4.0.1"
+  # Always: after rebuilding/pushing the same tag, Olares nodes refetch layers instead of
+  # keeping a pre-fix image (IfNotPresent + unchanged tag often causes stale libEGL).
+  pullPolicy: Always
 
 # Optional extra env for the main container (e.g. LD_LIBRARY_PATH after fixing image)
 extraEnv: []
