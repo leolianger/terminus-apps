@@ -1,0 +1,29 @@
+metadata:
+  title: Open Alice
+  description: 你的个人华尔街：面向多资产研究、决策与执行的文件驱动 AI 交易代理。
+spec:
+  fullDescription: |
+    Open Alice 是你的「个人华尔街」：一个覆盖股票、加密、商品、外汇与宏观市场的
+    AI 交易代理，从研究、开仓、持仓管理到平仓形成完整闭环。
+
+    核心特点：
+    - 全市场（Full-spectrum）：在统一工作空间中进行跨资产分析与交易。
+    - 全流程（Full-lifecycle）：不仅给入场信号，还覆盖仓位、监控、风控与退出决策。
+    - 全可控（Full-control）：每次执行都需显式确认，过程可审计、可追溯。
+
+    交易能力：
+    - UTA（统一交易账户）：每个账户是独立工作区，内含券商连接、风控规则与操作历史。
+    - Trading-as-Git：下单流程采用 stage -> commit -> push，便于审核与回放。
+    - Guard Pipeline：执行前自动检查仓位上限、冷却时间、交易标的白名单等约束。
+
+    研究与自动化：
+    - 提供跨资产市场数据、基础面研究与 RSS 新闻聚合能力。
+    - 基于事件总线支持 cron 调度与 heartbeat 巡检自动化。
+    - 支持多 AI 提供方（Claude Agent SDK / Vercel AI SDK），可在运行时切换。
+
+    交互方式：
+    - Web UI：聊天、组合视图与配置管理。
+    - Telegram：移动端交互与提醒。
+    - MCP Server：供外部 Agent 接入工具能力。
+
+    Open Alice 运行在你的本地环境，密钥与资金控制权始终掌握在你手中。

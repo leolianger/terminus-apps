@@ -1,27 +1,7 @@
----
-olaresManifest.version: "0.11.0"
-olaresManifest.type: app
 metadata:
-  name: openalice
-  icon: https://raw.githubusercontent.com/TraderAlice/OpenAlice/master/ui/public/alice.ico
-  description: Your one-person Wall Street. A file-driven AI trading agent for cross-asset research, decision, and execution.
-  appid: openalice
   title: Open Alice
-  version: "1.0.0"
-  categories:
-    - Utilities
-
-entrances:
-  - name: openalice
-    port: 3002
-    host: openalice
-    title: Open Alice
-    icon: https://raw.githubusercontent.com/TraderAlice/OpenAlice/master/ui/public/alice.ico
-    authLevel: private
-    openMethod: window
-
+  description: Your one-person Wall Street. A file-driven AI trading agent for cross-asset research, decision, and execution.
 spec:
-  versionName: "0.9.0-beta.13"
   fullDescription: |
     Open Alice is your one-person Wall Street: an AI trading agent covering equities,
     crypto, commodities, forex, and macro from research through position entry,
@@ -49,36 +29,3 @@ spec:
     - MCP server for external agent integration.
 
     Open Alice runs on your own machine so keys and capital stay under your control.
-  upgradeDescription: |
-    Initial Olares package.
-  developer: TraderAlice
-  website: https://traderalice.com
-  sourceCode: https://github.com/TraderAlice/OpenAlice
-  submitter: Olares
-  locale:
-    - en-US
-    - zh-CN
-  doc: https://github.com/TraderAlice/OpenAlice
-  license:
-    - text: AGPL-3.0-only
-      url: https://github.com/TraderAlice/OpenAlice/blob/master/LICENSE
-  requiredMemory: 512Mi
-  limitedMemory: 2Gi
-  requiredDisk: 512Mi
-  limitedDisk: 5Gi
-  requiredCpu: 500m
-  limitedCpu: "2"
-  supportArch:
-    - amd64
-    - arm64
-
-permission:
-  appData: true
-  appCache: true
-
-options:
-  apiTimeout: 0
-  dependencies:
-    - name: olares
-      type: system
-      version: ">=1.12.2-0"
