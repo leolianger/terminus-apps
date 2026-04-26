@@ -21,7 +21,7 @@ entrances:
     openMethod: window
 
 spec:
-  versionName: "0.9.0-beta.6"
+  versionName: "0.9.0-beta.13"
   fullDescription: |
     Open Alice is a file-driven AI trading agent that gives you your own research
     desk, quant team, and trading floor — all running 24/7.
