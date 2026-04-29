@@ -1,6 +1,6 @@
 apiVersion: v2
-appVersion: "4.0.1"
-description: Fincept Terminal — Qt desktop app (Fincept-Corporation/FinceptTerminal), image goai007/finceptterminal
+appVersion: "4.0.2"
+description: Fincept Terminal — Qt desktop app, browser-served via noVNC (image goai007/finceptterminal-olares)
 name: finceptterminal
 type: application
 version: 1.0.0

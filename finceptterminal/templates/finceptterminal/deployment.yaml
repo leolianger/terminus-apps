@@ -42,6 +42,10 @@ spec:
         - name: finceptterminal
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
           env:
             - name: TZ
               value: {{ .Values.timezone | default "Etc/UTC" | quote }}
@@ -53,6 +57,16 @@ spec:
               value: /data/.local/share
             - name: DISPLAY
               value: ":0"
+            - name: SCREEN_WIDTH
+              value: {{ .Values.display.width | default 1920 | quote }}
+            - name: SCREEN_HEIGHT
+              value: {{ .Values.display.height | default 1080 | quote }}
+            - name: SCREEN_DEPTH
+              value: {{ .Values.display.depth | default 24 | quote }}
+            - name: NOVNC_PORT
+              value: "8080"
+            - name: VNC_PORT
+              value: "5900"
 {{- with .Values.extraEnv }}
 {{ toYaml . | nindent 12 }}
 {{- end }}
@@ -69,31 +83,23 @@ spec:
             - name: dshm
               mountPath: /dev/shm
           startupProbe:
-            exec:
-              command:
-                - /bin/sh
-                - -c
-                - pgrep -f FinceptTerminal >/dev/null 2>&1 || exit 1
-            initialDelaySeconds: 15
-            periodSeconds: 10
-            timeoutSeconds: 5
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
             failureThreshold: 60
           readinessProbe:
-            exec:
-              command:
-                - /bin/sh
-                - -c
-                - pgrep -f FinceptTerminal >/dev/null 2>&1 || exit 1
-            initialDelaySeconds: 10
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
             periodSeconds: 15
             timeoutSeconds: 5
             failureThreshold: 5
           livenessProbe:
-            exec:
-              command:
-                - /bin/sh
-                - -c
-                - pgrep -f FinceptTerminal >/dev/null 2>&1 || exit 1
+            tcpSocket:
+              port: 8080
             initialDelaySeconds: 60
             periodSeconds: 30
             timeoutSeconds: 5
@@ -108,3 +114,21 @@ spec:
             medium: Memory
             sizeLimit: 512Mi
       restartPolicy: Always
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: finceptterminal
+  namespace: "{{ .Release.Namespace }}"
+  labels:
+    io.kompose.service: finceptterminal-app
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    io.kompose.service: finceptterminal-app

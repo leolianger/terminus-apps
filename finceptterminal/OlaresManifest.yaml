@@ -21,13 +21,13 @@ entrances:
     openMethod: window
 
 spec:
-  versionName: "4.0.1"
+  versionName: "4.0.2"
   promoteImage:
     - https://raw.githubusercontent.com/Fincept-Corporation/FinceptTerminal/main/images/Dashboard.png
   fullDescription: |
     Fincept Terminal is a native C++20 / Qt6 financial intelligence platform: CFA-level analytics, embedded Python, 100+ data connectors, real-time trading, AI agents, and a visual node editor.
 
-    The default container image is a desktop binary (X11 / Qt xcb). For Docker, upstream recommends Linux with X11 (`DISPLAY` and `/tmp/.X11-unix`). This Olares chart runs that workload plus a small gateway on port 8080 for health and entrance routing; configure your environment for GUI access per upstream documentation.
+    This Olares chart runs the upstream Qt binary inside a headless display stack (Xvfb + fluxbox + x11vnc + noVNC) and exposes the desktop on port 8080. Open the entrance from Olares to interact with the terminal directly in your browser — no local X server required.
 
   developer: Fincept Corporation
   website: https://github.com/Fincept-Corporation/FinceptTerminal

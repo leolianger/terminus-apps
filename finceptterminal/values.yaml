@@ -1,30 +1,26 @@
 # Upstream: https://github.com/Fincept-Corporation/FinceptTerminal
-# Image (explicit repository:tag per Olares packaging guide)
 #
-# This chart does NOT build the app — it only pulls `image.repository:tag`.
-# Point these at an image built from the repo-root Dockerfile (runtime stage must
-# install Mesa/EGL stack, e.g. libegl1 libgles2 libgbm1 — see FinceptTerminal Dockerfile).
-#
-# Common failures:
-#   • libqgeoview.so — image must COPY vendored *.so from build/linux-release into /app
-#   • libEGL.so.1 — image missing libegl1, OR the node still runs an old cached layer
-#     for this tag. Use pullPolicy: Always after you repush the same tag, or bump `tag`.
-#
-# Default registry is an example; replace with your CI-pushed image (Docker Hub user/repo).
+# This chart pulls a pre-built Olares-flavored image (Xvfb + fluxbox + x11vnc +
+# noVNC wrapped around the upstream Qt binary). The image is produced by
+# .github/workflows/docker-olares.yml in the FinceptTerminal repo on push to
+# main / tag v*. Bump `image.tag` in lockstep with the workflow's
+# DOCKER_IMAGE_TAG.
 image:
-  repository: docker.io/goai007/finceptterminal
-  tag: "4.0.1"
-  # Always: after rebuilding/pushing the same tag, Olares nodes refetch layers instead of
-  # keeping a pre-fix image (IfNotPresent + unchanged tag often causes stale libEGL).
+  repository: docker.io/goai007/finceptterminal-olares
+  tag: "4.0.2"
+  # Always: after rebuilding/pushing the same tag, Olares nodes refetch layers
+  # instead of keeping a stale image cache.
   pullPolicy: Always
 
-# Optional extra env for the main container (e.g. LD_LIBRARY_PATH after fixing image)
+# Optional extra env for the main container.
 extraEnv: []
 
-# Olares entrance + probes on 8080; native Qt binary has no HTTP port (see README Docker + X11).
-imageGateway:
-  repository: docker.io/beclab/aboveos-bitnami-openresty
-  tag: "1.25.3-2"
+# noVNC / Xvfb tuning. The noVNC client auto-fits the canvas to the browser
+# viewport, but the underlying X server runs at this resolution.
+display:
+  width: 1920
+  height: 1080
+  depth: 24
 
 timezone: "Etc/UTC"
 
