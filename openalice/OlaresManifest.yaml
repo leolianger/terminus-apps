@@ -6,7 +6,7 @@ metadata:
   icon: https://raw.githubusercontent.com/TraderAlice/OpenAlice/master/ui/public/alice.ico
   description: Your one-person Wall Street. A file-driven AI trading agent for cross-asset research, decision, and execution.
   appid: openalice
-  title: Open Alice
+  title: OpenAlice
   version: "1.0.0"
   categories:
     - Utilities
@@ -15,15 +15,15 @@ entrances:
   - name: openalice
     port: 3002
     host: openalice
-    title: Open Alice
+    title: OpenAlice
     icon: https://raw.githubusercontent.com/TraderAlice/OpenAlice/master/ui/public/alice.ico
     authLevel: private
     openMethod: window
 
 spec:
-  versionName: "0.9.0-beta.13"
+  versionName: "0.10.0-beta.0"
   fullDescription: |
-    Open Alice is your one-person Wall Street: an AI trading agent covering equities,
+    OpenAlice is your one-person Wall Street: an AI trading agent covering equities,
     crypto, commodities, forex, and macro from research through position entry,
     ongoing management, and exit.
 
@@ -48,7 +48,7 @@ spec:
     - Telegram connector for mobile workflows.
     - MCP server for external agent integration.
 
-    Open Alice runs on your own machine so keys and capital stay under your control.
+    OpenAlice runs on your own machine so keys and capital stay under your control.
   upgradeDescription: |
     Initial Olares package.
   developer: TraderAlice

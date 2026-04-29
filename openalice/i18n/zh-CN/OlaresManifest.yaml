@@ -1,9 +1,9 @@
 metadata:
-  title: Open Alice
+  title: OpenAlice
   description: 你的个人华尔街：面向多资产研究、决策与执行的文件驱动 AI 交易代理。
 spec:
   fullDescription: |
-    Open Alice 是你的「个人华尔街」：一个覆盖股票、加密、商品、外汇与宏观市场的
+    OpenAlice 是你的「个人华尔街」：一个覆盖股票、加密、商品、外汇与宏观市场的
     AI 交易代理，从研究、开仓、持仓管理到平仓形成完整闭环。
 
     核心特点：
@@ -26,4 +26,4 @@ spec:
     - Telegram：移动端交互与提醒。
     - MCP Server：供外部 Agent 接入工具能力。
 
-    Open Alice 运行在你的本地环境，密钥与资金控制权始终掌握在你手中。
+    OpenAlice 运行在你的本地环境，密钥与资金控制权始终掌握在你手中。

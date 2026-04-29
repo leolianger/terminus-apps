@@ -1,9 +1,9 @@
 metadata:
-  title: Open Alice
+  title: OpenAlice
   description: Your one-person Wall Street. A file-driven AI trading agent for cross-asset research, decision, and execution.
 spec:
   fullDescription: |
-    Open Alice is your one-person Wall Street: an AI trading agent covering equities,
+    OpenAlice is your one-person Wall Street: an AI trading agent covering equities,
     crypto, commodities, forex, and macro from research through position entry,
     ongoing management, and exit.
 
@@ -28,4 +28,4 @@ spec:
     - Telegram connector for mobile workflows.
     - MCP server for external agent integration.
 
-    Open Alice runs on your own machine so keys and capital stay under your control.
+    OpenAlice runs on your own machine so keys and capital stay under your control.
