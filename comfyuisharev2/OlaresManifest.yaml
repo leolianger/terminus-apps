@@ -7,7 +7,7 @@ metadata:
   description: The most powerful and modular stable diffusion GUI and backend.
   icon: https://app.cdn.olares.com/appstore/comfyui/icon2.png
   appid: comfyuisharev2
-  version: '1.0.31'
+  version: '1.0.38'
   title: ComfyUI Shared
   categories:
   - Creativity
@@ -53,19 +53,9 @@ permission:
 {{- if and .Values.admin .Values.bfl.username (eq .Values.admin .Values.bfl.username) }}
   userData:
   - Home
-  sysData:
-  - dataType: legacy_api
-    group: api.intent
-    appName: desktop
-    svc: edge-desktop
-    namespace: user-space
-    port: 80
-    version: v1
-    ops:
-    - POST
 {{- end }}
 spec:
-  versionName: '0.19.3'
+  versionName: '0.24.0'
   featuredImage: https://app.cdn.olares.com/appstore/comfyui/1.png
   promoteImage:
   - https://app.cdn.olares.com/appstore/comfyui/1.png
@@ -144,19 +134,17 @@ spec:
     Workflow examples can be found on the [Examples page](https://comfyanonymous.github.io/ComfyUI_examples/)
 
   upgradeDescription: |    
-    Config update:
-    - Fix nunchaku compatibility issue
-    
-    ComfyUI upgrade to version 0.19.3
+    ComfyUI upgrade to version 0.24.0
 
-    What's Changed
-    - nodes_textgen: Implement use_default_template for LTX by @rattus128 in #13451
-    - fix(api-nodes): corrected StabilityAI price badges by @bigcat88 in #13454
-    - [Partner Nodes] add new "arrow-1.1" and "arrow-1.1-max" SVG models by @bigcat88 in #13447
-    - Update workflow templates to v0.9.57 by @comfyui-wiki in #13455
-    - [Partner Nodes] make "obj" output optional in Hunyuan3D Text and Image to 3D by @bigcat88 in #13449
+    Key Changes:
+    - **Model and multimodal capabilities were expanded across releases**: v0.22.0 added MoGe, Stable Audio 3, HiDream-O1 area conditioning, and fixes for Qwen3.5 multi-image prompts; v0.23.0 introduced Microsoft Lens, NVIDIA PixelDiT, PiD, Gaussian Splat, and TripoSplat support; v0.24.0 added Ideogram V4 plus SDXL and QwenImage support for PiD.
+    - **Performance and memory management received major improvements**: v0.22.0 reduced LTX2.3 peak VRAM usage with guide masks; v0.23.0 added multi-threaded model loading from disk, MultiGPU work units for faster sampling, cache and memory-factor tuning, and NVIDIA-side model speedups; v0.24.0 refined Tripo / DINOv3 inference precision and Ideogram 4 memory usage factors.
+    - **Node system and workflow usability were improved**: v0.22.0 introduced the StringFormat node and refined node names, descriptions, and categories; v0.23.0 added MediaPipe face detection, Save Image advanced, logic nodes, Preview3DAdvanced, 3D file types, and Gaussian Splat nodes; v0.24.0 updated workflow templates to v0.9.94 and adjusted Partner Nodes categories.
+    - **3D, video, and image workflows became more capable and stable**: v0.22.0 improved LTXV guide handling, reusable empty audio latents, and Hunyuan3D 2.1 stability; v0.23.0 added Load3D / Load3DCamera fields and outputs, 3D file types, Tripo3D P1, TripoSplat, and video reference improvements; v0.24.0 fixed TripoSplat preview compatibility with the old offloading mode.
+    - **OpenAPI, security, and engineering governance were strengthened**: v0.22.0 added SECURITY.md and refined OpenAPI documentation; v0.23.0 added OAuth 2.1 and RFC 7591 DCR endpoints, corrected multiple API schemas / operation IDs / response declarations, and introduced an unreviewed-merge detector for SOC 2 compliance; v0.24.0 focused on cleanup and stability fixes.
+    - **Bug fixes and compatibility improvements were broad and continuous**: the releases fixed issues involving BiRefNet, FeatherMask, LoRA reshaping, single-channel Lanczos tensors, LTX AV, background-removal mask shape, MultiGPU manual-abort freezing, and large-integer overflow in the Math Expression node, improving robustness in edge cases.
 
-    Full release note at: https://github.com/Comfy-Org/ComfyUI/releases/tag/v0.19.3
+    Full release note at: https://github.com/Comfy-Org/ComfyUI/releases/tag/v0.24.0
 
   developer: Comfy Org
   website: https://www.comfy.org/

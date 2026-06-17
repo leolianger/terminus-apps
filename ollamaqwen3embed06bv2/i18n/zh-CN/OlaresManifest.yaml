@@ -20,4 +20,6 @@ spec:
     俄罗斯套娃表示：支持灵活的嵌入维度，可在性能和效率之间进行权衡。
 
   upgradeDescription: |
-    首次发布，搭载 Ollama 0.20.6。
+    Ollama 运行时：ollama/ollama:0.30.0。CUDA ComputeCache 共享目录 Home/Ollama/.nv（多应用共用）。代理 API：beclab/harveyff-olares-ollama:v0.1.21。
+
+    Olares API 代理镜像升至 beclab/harveyff-olares-ollama:v0.1.21。

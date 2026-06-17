@@ -6,7 +6,7 @@ metadata:
   description: Call 100+ LLMs in OpenAI format
   appid: litellm
   title: LiteLLM
-  version: "1.0.10"
+  version: "1.0.11"
   categories:
     - Utilities_v112
     - Utilities
@@ -74,7 +74,7 @@ spec:
   requiredDisk: 1Gi
   limitedDisk: 500Gi
   limitedMemory: 4.5Gi
-  requiredMemory: 400Mi
+  requiredMemory: 576Mi
   supportArch:
     - amd64
     - arm64
