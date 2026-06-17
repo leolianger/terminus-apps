@@ -1,8 +1,8 @@
 image:
-  version: '2026.3'
+  version: '2026.5.1'
 
 # FreqUI image tag (avoid latest; use explicit, traceable version).
-frequiVersion: '2.2.3'
+frequiVersion: '3.0.2'
 
 # Webserver for FreqUI download-data + backtest; data under {appData}/freqtrade-backtest/. FreqUI API URL: <app>/api-backtest/
 backtest:

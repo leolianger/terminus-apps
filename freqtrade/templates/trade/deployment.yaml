@@ -67,7 +67,7 @@ spec:
             runAsUser: 0
       containers:
         - name: freqtrade
-          image: "docker.io/freqtradeorg/freqtrade:2026.3"
+          image: "docker.io/freqtradeorg/freqtrade:2026.5.1"
           args:
             - "trade"
             - "--config"
@@ -227,7 +227,7 @@ spec:
             runAsUser: 0
       containers:
         - name: freqtrade
-          image: "docker.io/freqtradeorg/freqtrade:2026.3"
+          image: "docker.io/freqtradeorg/freqtrade:2026.5.1"
           args:
             - "trade"
             - "--config"
@@ -382,7 +382,7 @@ spec:
             runAsUser: 0
       containers:
         - name: freqtrade
-          image: "docker.io/freqtradeorg/freqtrade:2026.3"
+          image: "docker.io/freqtradeorg/freqtrade:2026.5.1"
           args:
             - webserver
             - --config

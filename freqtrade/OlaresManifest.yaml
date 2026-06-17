@@ -7,7 +7,7 @@ metadata:
   description: Free, open source crypto trading bot
   appid: freqtrade
   title: Freqtrade
-  version: "1.0.4"
+  version: "1.0.5"
   categories:
     - Utilities
     - Productivity_v112
@@ -21,7 +21,7 @@ entrances:
     openMethod: window
 
 spec:
-  versionName: "2026.3"
+  versionName: "2026.5.1"
   promoteImage:
     - https://app.cdn.olares.com/appstore/freqtrade/1.webp
     - https://app.cdn.olares.com/appstore/freqtrade/2.webp

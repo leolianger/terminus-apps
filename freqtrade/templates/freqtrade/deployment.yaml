@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   labels:
     io.kompose.service: freqtrade
-  name: '{{ .Release.Name }}'
+  name: freqtrade
   namespace: '{{ .Release.Namespace }}'
 spec:
   replicas: 1
@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: freqtrade
-          image: "docker.io/freqtradeorg/frequi:2.2.3"
+          image: "docker.io/freqtradeorg/frequi:3.0.2"
           ports:
             - containerPort: 80
           resources:
