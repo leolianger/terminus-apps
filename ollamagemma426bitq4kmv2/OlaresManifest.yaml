@@ -8,7 +8,7 @@ metadata:
   description: "Gemma4 26B (Ollama library, Q4_K_M) for efficient multimodal local inference"
   appid: ollamagemma426bitq4kmv2
   title: Gemma4 26B Q4_K_M (Ollama)
-  version: '1.0.1'
+  version: '1.0.5'
   categories:
     - AI
 sharedEntrances:
@@ -30,11 +30,11 @@ entrances:
 spec:
   versionName: 'gemma4:26b'
   fullDescription: |
-    ## IMPORTANT NOTE ##
+    **IMPORTANT NOTE**
     This is a shared app. Once installed by the Olares Admin, all users in the cluster can use it through reference app.
     User traffic goes through the proxy to Ollama.
 
-    ## MODEL ##
+    **MODEL**
     Uses Ollama library model **gemma4:26b** (default Q4_K_M in the registry). This chart sets **OLLAMA_CONTEXT_LENGTH** to **65536** (64k).
 
     Gemma 4 26B is a mixture-of-experts model: strong quality for reasoning, coding, and multimodal (text + image) tasks with a smaller active parameter footprint than a dense model of similar capability.
@@ -42,7 +42,9 @@ spec:
     Instruction-tuned with support for tool calling; context is capped at 64k here for predictable VRAM use (raise or lower in ConfigMap if your hardware requires).
 
   upgradeDescription: |
-    Sets **OLLAMA_CONTEXT_LENGTH** to **65536** (64k). Bundles Ollama [0.22.0](https://github.com/ollama/ollama/releases/tag/v0.22.0) and proxy `beclab/harveyff-olares-ollama:v0.1.18-fix3`. Model: gemma4:26b.
+    Ollama runtime: ollama/ollama:0.30.0. CUDA ComputeCache shared at Home/Ollama/.nv (all Ollama apps).
+
+    Upgrade Olares API proxy image to beclab/harveyff-olares-ollama:v0.1.21.
 
   developer: Google
   website: https://ai.google.dev/gemma
@@ -81,7 +83,6 @@ spec:
   - name: ollamagemma426bitq4kmv2
 permission:
   appData: true
-  appCache: true
   userData:
     - Home/Ollama
 options:

@@ -24,36 +24,48 @@ spec:
     - **持续更新**：通过定期更新和社区贡献持续改进。
 
   upgradeDescription: |
-    **升级 Open WebUI 至 v0.9.2（Chart 1.0.27）**
+    **升级 Open WebUI 至 v0.9.6（Chart 1.0.30）**
 
     **本 Chart 打包说明（Olares）**
+    - **改用官方镜像 & 持久化会话密钥（默认开启）：** 本 Chart 现使用官方 `openwebui/open-webui` 镜像，**`ENABLE_WEBUI_SECRET_KEY_PERSIST`** 默认 **`true`**，通过 `WEBUI_SECRET_KEY_FILE` 将 WebUI 密钥持久化到 appData 卷的 `data/.webui_secret_key`，使登录态在重启与后续升级后保持有效。若希望每次重启都重新生成密钥、让所有用户登出，可在 **设置 → 应用 → 环境变量** 中将其设为 **`false`**。由于本次升级会初始化该密钥，升级后需重新登录一次，之后即保持稳定。
     - **升级前数据库备份（默认开启）：** **`ENABLE_WEBUI_DB_BACKUP`** 默认 **`true`**。每个新 Chart 版本首次启动前，若存在 `webui.db` 且尚无 `data/backups/webui_chart_<chart 版本>.db`，init 容器会复制一份（仍在同一 appData 卷）；同一 Chart 版本重复重启不会重复生成该文件。若某次升级**不需要**备份，请在升级前在 **设置 → 应用 → 环境变量** 中将该项设为 **`false`**。
+    - **库表迁移：** v0.9.6 包含数据库 schema 变更，强烈建议保留默认备份后再升级。多 worker / 多节点 / 负载均衡部署必须**同时**升级，不支持滚动升级。迁移已增强容错，会跳过已存在的表/索引/列。
     - **升级之后：** 保持 **`true`** 则后续 Chart 升级仍会按版本自动备份一次；改为 **`false`** 则之后不再备份，直到再次设为 **`true`**。
     - **纯 Helm：** 使用 `backupWebuiDb.enabled`（chart 默认 `false`）；需要备份 init 时再设为 `true`。
     - **已有数据：** appData 中的数据库文件会保留；Open WebUI 会在首次启动时自动完成库结构升级。
 
-    **Open WebUI v0.9.2 主要更新**
+    **Open WebUI v0.9.5 → v0.9.6 主要更新**
+
+    **安全与访问控制（v0.9.6）**
+    - **安全公告：** 本次发布包含多项安全与访问控制修复，建议尽快升级生产部署。
+    - **跨用户数据保护：** 检索集合、知识库搜索、聊天文件附件、模型知识文件以及 `image_url` 文件引用现在均执行按文件/按知识库的访问校验，阻断窃取他人文件。
+    - **工具服务器强制鉴权：** 内联工具服务器权限在聊天补全请求中强制生效；API Key 端点白名单按实际路由路径匹配。
+    - **SSRF 与路径加固：** 出站抓取新增 DNS 重绑定防护、Playwright 网页加载器 URL 校验、OAuth 头像重定向控制，并修复 Terminal 代理与缓存文件的路径穿越、集合名校验。
+    - **脚本注入修复：** Mermaid 图与模型头像在展示前经过净化/校验；跨源 iframe 嵌入仅在显式授权后才能操作聊天输入。
+    - **降低公开信息暴露：** `/api/config` 不再向匿名调用方泄露若干特性开关；关闭系统提示跳过与代码解释器权限旁路。
 
     **新功能与增强**
-    - **PaddleOCR-vl：** 可选文档抽取引擎（管理员可在文档检索配置里设置 API 地址与 Token）。
-    - **Firecrawl v2：** 网页抓取改用 v2 API，带重试、限流时指数退避与可配置超时（云端或自建均适用）。
-    - **日历：** 日程支持 **`reminder_minutes`**，可由模型自定义提前提醒时长（不再固定 10 分钟）。
-    - **`CUSTOM_API_KEY_HEADER`：** 可自定义 API Key 请求头名称，便于前置反向代理已占用 `Authorization` 的场景。
-    - **OAuth：** 支持按提供商断开 OAuth 会话（例如 MCP），并提供专用接口，便于重新登录。
-    - **来源：** 来源按钮在超过三条来源时显示 **+N**，提示仍有隐藏引用。
+    - **知识库目录智能同步：** 一键将本地目录同步进知识库，仅上传新增/修改文件、清理已删除文件，自动镜像目录结构并显示逐文件进度。新增配套工具 `oikb`，支持本地目录、GitHub、S3、Confluence 等 40+ 数据源。
+    - **知识库文件夹与重命名：** 可将知识库文件组织为嵌套文件夹并提供面包屑导航，并可就地重命名文件。
+    - **知识库文件系统工具：** 新增内置工具（通过 **`ENABLE_KB_EXEC`** 启用），让模型用 `ls`、`cat`、`grep`、`find`、`head`、`tail`、`sed` 及管道浏览知识库。
+    - **表情选择器** 加入富文本工具栏，**按会话切换 Skills**（Integrations 菜单），**访问预览** 让管理员查看某用户/分组可访问的模型/知识库/工具。
+    - **新增后端：** Valkey 向量数据库（**`VALKEY_URL`**）、Linkup 网页搜索、Azure AI Foundry v1 + Entra ID，以及通配（`*`）OAuth 角色映射与可选的 **`OAUTH_AUTO_REDIRECT`** 单点登录跳转。
+    - **MinerU 文件类型配置（`MINERU_FILE_EXTENSIONS`）**、旧版 `.doc` 文本提取、可配置 MCP 连接超时（**`MCP_INITIALIZE_TIMEOUT`**），以及头像大小上限（**`PROFILE_IMAGE_MAX_DATA_URI_SIZE`**）。
 
-    **性能与界面**
-    - **模型页：** 分页接口去掉 base64 头像以减小体积；标签与工具列表加载更快。
-    - **头像与启动图：** 默认模型图标减少磁盘读取；启动图更早预加载以改善首屏。
-    - **长会话：** 消息列表改用浏览器原生 **content-visibility** 虚拟化，替代原有 JS 占位方案，滚动更稳、组件抖动更少。
-    - **流式 Markdown：** 减少重复清理注册，流式更新更省内存。
+    **性能**
+    - **更快的首屏加载、带工具的补全与网页搜索：** config 接口去除多余的用户计数查询，引用的工具批量获取，SearXNG/Google PSE/Brave/Serper/Serpstack 搜索改为非阻塞。
+    - **更轻量的 Ollama 连接** 复用共享连接池，减少 Redis 模型列表冗余写入，并在大规模部署中降低 websocket 断连清理开销。
 
-    **稳定性、安全与其他**
-    - **MCP：** 中断的工具调用不再引发 CPU 飙升；正确处理 resource 类型工具结果；Redis 订阅对更多服务端配置更兼容。
-    - **Skills：** 持久化对话里提到的技能会稳定注入系统提示；`<$skillId|label>` 等标签在服务端剥离后再送给模型。
-    - **接口与鉴权：** 直连聊天 API 失败时返回明确 HTTP 错误；取消生成时正确关闭上游流；OAuth 发现增加 RFC 9728 回退；forward-auth 场景下会话解析更稳健；模型头像重定向路径校验更严；RAG 模板重复 `[context]` / {{ "{{CONTEXT}}" }} 时界面告警。
-    - **依赖与镜像：** Brotli 升级修复 **CVE-2025-6176**；ARM64 镜像构建设置 **`UV_LINK_MODE=copy`**，减轻 QEMU 交叉编译下 Python 依赖损坏问题。
+    **稳定性修复（节选）**
+    - **网页搜索可靠性：** 默认加载器恢复正常抓取；新环境变量 **`USER_AGENT`**（本 Chart 已设置）避免被机器人检测拦截；修复 Firecrawl 与 Kagi 搜索。
+    - **会话恢复：** 失败重生成导致的损坏消息图现可正常打开并自愈；缺失文件夹的导入会话能正确显示。
+    - **ComfyUI 图像生成/编辑** 恢复正常，含私有/内网端点；图像生成可容忍非标准响应头。
+    - **MCP 工具服务器** 保持连接（OAuth 会话不再被错误刷新），并能发现服务器声明的 OAuth 作用域。
+    - **PostgreSQL 知识库搜索** 可处理超大文档；非 UTF-8 文本/CSV 上传与嵌套数据中的空字节均能优雅处理。
+    - **非 Unicode 控制台启动**（如 Windows）不再崩溃；数据库健康检查在瞬时错误后自动恢复；重置后首个管理员注册不再被阻塞。
 
-    **翻译：** 芬兰语、韩语、巴西葡萄牙语、荷兰语等改进。
+    **变更**
+    - **工具调用迭代上限改名：** **`CHAT_RESPONSE_MAX_TOOL_CALL_ITERATIONS`** 取代 `CHAT_RESPONSE_MAX_TOOL_CALL_RETRIES`（旧名作为回退保留）；默认值由 30 提高到 256，`-1` 表示不限制。
+    - **`WEBUI_SECRET_KEY` 强制要求：** 不受支持的启动方式（如直接调用 uvicorn）未设置时将拒绝启动。本镜像使用的受支持启动方式会自动设置，故本 Chart 不受影响。
 
-    完整发布说明：https://github.com/open-webui/open-webui/releases/tag/v0.9.2
+    完整发布说明：https://github.com/open-webui/open-webui/releases/tag/v0.9.6

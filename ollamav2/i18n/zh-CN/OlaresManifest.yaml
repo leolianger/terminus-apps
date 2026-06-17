@@ -12,7 +12,7 @@ spec:
     对研究人员、开发者以及任何想要尝试大语言模型的人来说，Ollama 是一个非常有价值的工具。  
     使用 Ollama，您可以轻松下载和运行 LLMs，自定义并创建您自己的模型，并使用您设备上的文件与 LLMs 进行对话。
 
-    *Ollama 支持广泛的模型，包括：*
+    Ollama 支持广泛的模型，包括：
     - Llama 3 8B
     - Llama 3 70B
     - Phi 3 Mini 3.8B
@@ -29,37 +29,44 @@ spec:
     - Solar 10.7B
 
   upgradeDescription: |
-    将 Ollama 从 v0.20.0 升级至 v0.20.5
+    将 Ollama 从 v0.30.0 升级至 v0.30.6
 
     **更新内容**
 
-    **v0.20.5 (2026-04-09)**
-    - OpenClaw 频道设置：通过 `ollama launch openclaw` 连接 WhatsApp、Telegram、Discord 等消息渠道
-    - 在兼容 GPU 上为 Gemma 4 启用 flash attention
-    - `ollama launch openclaw` 现可检测基于 curl 安装的 OpenCode（~/.opencode/bin）
-    - 修复 safetensors 架构模型的 `/save` 命令
+    v0.30.6 (2026-06-05)
+    - 新增模型：Gemma 4 QAT（量化感知训练）权重，大幅降低显存占用并提升端侧性能——标签以 `-qat` 结尾（如 `gemma4:e2b-it-qat`、`gemma4:12b-it-qat`、`gemma4:31b-it-qat`）
+    - `ollama launch omp` 现已集成 Oh My Pi（带 IDE 集成的 AI 编码助手）
+    - MLX 嵌入层改用 NVFP4 全局缩放，提升 Apple Silicon 上的量化质量
 
-    **v0.20.4 (2026-04-07)**
-    - mlx：通过 NAX 提升 M5 性能
-    - gemma4：启用 flash attention
+    v0.30.5 (2026-06-04)
+    - 修复 `gemma4:12b` 在 x86、CUDA、Linux 与 Windows 上的浮点异常崩溃
+    - `ollama launch hermes-desktop` 在已安装打包桌面应用时不再重复构建
+    - `ollama launch hermes` 现支持通过 Hermes PowerShell 安装器进行原生 Windows 安装
+    - 新增 Cline CLI 集成文档
 
-    **v0.20.3 (2026-04-07)**
-    - 改进 Gemma 4 工具调用
-    - 在 Ollama App 中添加最新模型
-    - 修复 OpenClaw 启动 TUI 的问题
+    v0.30.0 (2026-05-13)
+    - Ollama 0.30 基于 llama.cpp 提升兼容性与性能，并在 Apple Silicon 上增强 MLX 引擎，覆盖更广的硬件
+    - 支持更多模型，包括来自 Hugging Face 的 GGUF 模型及自训练微调模型
+    - NVIDIA 硬件上推理更快
+    - 设置 `LLAMA_ARG_FIT_TARGET=1024`（每 GPU 预留空闲显存 MiB；必须非空，空值会导致 0.30 llama-server 崩溃）
+    - 将 CUDA ComputeCache 挂载至 Home/Ollama/.nv（多 Ollama 应用共用），加速 GPU 内核预热
 
-    **v0.20.2 (2026-04-04)**
-    - 应用主页默认显示新对话而非启动页
+    **已知问题**
+    - `laguna-xs.2` 在 Windows/Linux 上尚不支持
+    - `llama3.2-vision` 尚不支持
+    - `nomic-embed-text` 现按模型卡将输入转为小写（旧版错误地保留了大小写混排）
 
-    **v0.20.1 (2026-04-03)**
-    - bench：添加提示校准、上下文大小参数和 NumCtx 报告
-    - 修复 gemma4 引号字符串参数解析问题
-    - gemma4：启用 flash attention
-    - 重构 gemma4 工具调用处理
-    - 修复 ROCm 构建中 cublasGemmBatchedEx 预留包装器问题
+    v0.24.0 (2026-05-14)
+    - Ollama 0.24 支持 OpenAI Codex 桌面应用（并行处理 Codex 会话，内置 worktree 与 Git）；使用 `ollama launch codex-app`，`ollama launch codex-app --restore` 可恢复此前配置
+    - Codex 内置浏览器可加载本地服务与站点以便批注；支持在应用内审阅代码并留言迭代
+    - 重构 Apple Silicon 上的 MLX 采样器以提升生成质量
 
-    **其他**
-    - 升级 terminal 至 v0.0.8
+    v0.23.2 (2026-05-07)
+    - 由于 Claude Desktop 第三方集成仅限于 Anthropic 模型，`ollama launch` 不再包含 Claude Desktop
+    - 使用 `ollama launch claude-desktop --restore` 可将 Claude Desktop 恢复至默认状态
+    - `/api/show` 响应现已支持缓存，中位数延迟提升约 6.7 倍，可显著加速 VS Code 等集成的加载速度
+    - 改进 launch 集成管理时的备份流程
+    - MLX 运行器中图像生成布局更整洁
 
     详细发布说明请访问：
     https://github.com/ollama/ollama/releases
