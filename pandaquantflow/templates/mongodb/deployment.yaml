@@ -1,0 +1,90 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: panda-mongodb
+  namespace: "{{ .Release.Namespace }}"
+  labels:
+    app.kubernetes.io/name: panda-mongodb
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: panda-mongodb
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: panda-mongodb
+    spec:
+      securityContext:
+        fsGroup: 999
+      initContainers:
+        - name: init-chmod-data
+          image: "docker.io/beclab/aboveos-busybox:1.37.0"
+          command:
+            - sh
+            - "-c"
+            - |
+              mkdir -p /data/db
+              chown -R 999:999 /data/db
+          volumeMounts:
+            - name: mongodb-data
+              mountPath: /data/db
+          securityContext:
+            runAsUser: 0
+      containers:
+        - name: mongodb
+          image: "docker.io/beclab/mongo:7.0"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: {{ .Values.service.mongodbPort }}
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              value: "{{ .Values.mongodb.user }}"
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              value: "{{ .Values.mongodb.password }}"
+          args:
+            - "--bind_ip_all"
+          volumeMounts:
+            - name: mongodb-data
+              mountPath: /data/db
+          startupProbe:
+            tcpSocket:
+              port: {{ .Values.service.mongodbPort }}
+            failureThreshold: 30
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.service.mongodbPort }}
+            initialDelaySeconds: 20
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 1000m
+              memory: 2Gi
+      volumes:
+        - name: mongodb-data
+          hostPath:
+            path: '{{ .Values.userspace.appData | default "" }}/pandaquantflow/mongodb'
+            type: DirectoryOrCreate
+      restartPolicy: Always
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: panda-mongodb
+  namespace: "{{ .Release.Namespace }}"
+spec:
+  type: ClusterIP
+  ports:
+    - name: mongo
+      port: {{ .Values.service.mongodbPort }}
+      targetPort: {{ .Values.service.mongodbPort }}
+  selector:
+    app.kubernetes.io/name: panda-mongodb

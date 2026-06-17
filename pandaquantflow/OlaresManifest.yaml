@@ -1,0 +1,61 @@
+---
+olaresManifest.version: "0.11.0"
+olaresManifest.type: app
+metadata:
+  name: pandaquantflow
+  icon: https://file.bttcdn.com/appstore/default/default-app-icon.png
+  description: QuantFlow research workspace with Panda Factor and MongoDB
+  appid: pandaquantflow
+  title: Panda QuantFlow
+  version: "1.0.0"
+  categories:
+    - Productivity
+    - Productivity_v112
+    - Utilities
+entrances:
+  - name: pandaquantflow
+    port: 8000
+    host: pandaquantflow
+    title: Panda QuantFlow
+    icon: https://file.bttcdn.com/appstore/default/default-app-icon.png
+    authLevel: private
+    openMethod: window
+
+spec:
+  versionName: "1.0.0"
+  fullDescription: |
+    Panda QuantFlow provides an integrated quant research environment on Olares.
+
+    This app deploys:
+    - Panda QuantFlow service (web/API entrance)
+    - Panda Factor service (strategy/factor backend)
+    - MongoDB (data persistence)
+
+    Default image references are configurable in `values.yaml`.
+  developer: Panda
+  website: https://example.com
+  submitter: Olares
+  locale:
+    - en-US
+    - zh-CN
+  requiredMemory: 2048Mi
+  limitedMemory: 12288Mi
+  requiredDisk: 1Gi
+  limitedDisk: 20Gi
+  requiredCpu: 1000m
+  limitedCpu: 6000m
+  supportArch:
+    - amd64
+    - arm64
+
+permission:
+  appData: true
+  appCache: true
+
+options:
+  allowMultipleInstall: true
+  apiTimeout: 0
+  dependencies:
+    - name: olares
+      type: system
+      version: ">=1.12.5-0"

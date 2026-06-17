@@ -1,0 +1,73 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pandaquantflow
+  namespace: "{{ .Release.Namespace }}"
+  labels:
+    app.kubernetes.io/name: pandaquantflow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: pandaquantflow
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: pandaquantflow
+    spec:
+      containers:
+        - name: pandaquantflow
+          image: "docker.io/goai007/panda_quantflow:20260617"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: {{ .Values.service.quantflowPort }}
+          env:
+            - name: RUN_MODE
+              value: "LOCAL"
+            - name: MONGO_URI
+              value: "panda-mongodb:{{ .Values.service.mongodbPort }}"
+            - name: DATABASE_NAME
+              value: "{{ .Values.mongodb.database }}"
+            - name: MONGO_USER
+              value: "{{ .Values.mongodb.user }}"
+            - name: MONGO_PASSWORD
+              value: "{{ .Values.mongodb.password }}"
+            - name: MONGO_AUTH_DB
+              value: "{{ .Values.mongodb.authDb }}"
+            - name: MONGO_TYPE
+              value: "single"
+          startupProbe:
+            tcpSocket:
+              port: {{ .Values.service.quantflowPort }}
+            failureThreshold: 30
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.service.quantflowPort }}
+            initialDelaySeconds: 15
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: 300m
+              memory: 512Mi
+            limits:
+              cpu: 2000m
+              memory: 4Gi
+      restartPolicy: Always
+
+---
+# Olares entrance (host: pandaquantflow, port: 8000) resolves to this Service.
+apiVersion: v1
+kind: Service
+metadata:
+  name: pandaquantflow
+  namespace: "{{ .Release.Namespace }}"
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: {{ .Values.service.quantflowPort }}
+      targetPort: {{ .Values.service.quantflowPort }}
+  selector:
+    app.kubernetes.io/name: pandaquantflow

@@ -1,0 +1,11 @@
+metadata:
+  title: Panda QuantFlow
+  description: 包含 Panda Factor 与 MongoDB 的量化研究工作台
+spec:
+  fullDescription: |
+    Panda QuantFlow 在 Olares 上提供一体化的量化研究环境。
+
+    该应用会部署：
+    - Panda QuantFlow 服务（Web/API 入口）
+    - Panda Factor 服务（策略/因子后端）
+    - MongoDB（数据持久化）

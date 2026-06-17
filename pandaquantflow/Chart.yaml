@@ -1,0 +1,6 @@
+apiVersion: v2
+name: pandaquantflow
+description: Olares deployment for Panda Quantflow research stack
+type: application
+version: 1.0.0
+appVersion: "1.0.0"

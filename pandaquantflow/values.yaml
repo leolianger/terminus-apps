@@ -1,0 +1,20 @@
+# Image tags are hardcoded in templates (nofx/tradingagents pattern) so Olares
+# image downloader can parse valid references during install.
+image:
+  quantflow: docker.io/goai007/panda_quantflow:20260617
+  factor: docker.io/goai007/panda_factor:20260617
+  mongodb: docker.io/beclab/mongo:7.0
+
+userspace:
+  appData: ""
+
+service:
+  quantflowPort: 8000
+  factorPort: 8111
+  mongodbPort: 27017
+
+mongodb:
+  user: panda
+  password: panda
+  authDb: admin
+  database: panda

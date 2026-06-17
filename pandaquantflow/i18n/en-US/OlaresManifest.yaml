@@ -1,0 +1,11 @@
+metadata:
+  title: Panda QuantFlow
+  description: QuantFlow research workspace with Panda Factor and MongoDB
+spec:
+  fullDescription: |
+    Panda QuantFlow provides an integrated quant research environment on Olares.
+
+    This app deploys:
+    - Panda QuantFlow service (web/API entrance)
+    - Panda Factor service (strategy/factor backend)
+    - MongoDB (data persistence)
