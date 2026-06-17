@@ -33,10 +33,10 @@ spec:
             runAsUser: 0
       containers:
         - name: openalice
-          image: "docker.io/goai007/openalice:0.10.0-beta.0"
+          image: "docker.io/goai007/openalice:0.50.0-beta.1"
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 3002
+            - containerPort: 47331
           env:
             - name: TZ
               value: Etc/UTC
@@ -49,11 +49,11 @@ spec:
               memory: 2Gi
           volumeMounts:
             - name: data
-              mountPath: /app/data
+              mountPath: /data
           startupProbe:
             httpGet:
               path: /
-              port: 3002
+              port: 47331
               scheme: HTTP
             initialDelaySeconds: 45
             periodSeconds: 10
@@ -61,7 +61,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /
-              port: 3002
+              port: 47331
               scheme: HTTP
             initialDelaySeconds: 10
             periodSeconds: 30
@@ -85,6 +85,6 @@ spec:
   ports:
     - name: http
       port: 3002
-      targetPort: 3002
+      targetPort: 47331
   selector:
     io.kompose.service: openalice

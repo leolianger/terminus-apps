@@ -1,6 +1,6 @@
 apiVersion: v2
-appVersion: "0.10.0-beta.0"
+appVersion: "0.50.0-beta.1"
 description: OpenAlice - file-driven AI trading agent for crypto and securities.
 name: openalice
 type: application
-version: "1.0.0"
+version: "1.0.1"

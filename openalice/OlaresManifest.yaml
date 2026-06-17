@@ -7,7 +7,7 @@ metadata:
   description: Your one-person Wall Street. A file-driven AI trading agent for cross-asset research, decision, and execution.
   appid: openalice
   title: OpenAlice
-  version: "1.0.0"
+  version: "1.0.1"
   categories:
     - Utilities
 
@@ -21,7 +21,7 @@ entrances:
     openMethod: window
 
 spec:
-  versionName: "0.10.0-beta.0"
+  versionName: "0.50.0-beta.1"
   fullDescription: |
     OpenAlice is your one-person Wall Street: an AI trading agent covering equities,
     crypto, commodities, forex, and macro from research through position entry,
