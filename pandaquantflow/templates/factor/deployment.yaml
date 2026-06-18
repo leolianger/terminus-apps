@@ -5,16 +5,18 @@ metadata:
   name: panda-factor
   namespace: "{{ .Release.Namespace }}"
   labels:
-    app.kubernetes.io/name: panda-factor
+    io.kompose.service: panda-factor
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
-      app.kubernetes.io/name: panda-factor
+      io.kompose.service: panda-factor
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: panda-factor
+        io.kompose.service: panda-factor
     spec:
       containers:
         - name: panda-factor
@@ -36,15 +38,30 @@ spec:
             - name: MONGO_TYPE
               value: "single"
           startupProbe:
-            tcpSocket:
+            httpGet:
+              path: /
               port: {{ .Values.service.factorPort }}
-            failureThreshold: 30
+              scheme: HTTP
+            failureThreshold: 60
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.factorPort }}
+              scheme: HTTP
+            initialDelaySeconds: 5
             periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 6
           livenessProbe:
-            tcpSocket:
+            httpGet:
+              path: /
               port: {{ .Values.service.factorPort }}
-            initialDelaySeconds: 15
+              scheme: HTTP
+            initialDelaySeconds: 30
             periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 5
           resources:
             requests:
               cpu: 300m
@@ -60,6 +77,8 @@ kind: Service
 metadata:
   name: panda-factor
   namespace: "{{ .Release.Namespace }}"
+  labels:
+    io.kompose.service: panda-factor
 spec:
   type: ClusterIP
   ports:
@@ -67,4 +86,4 @@ spec:
       port: {{ .Values.service.factorPort }}
       targetPort: {{ .Values.service.factorPort }}
   selector:
-    app.kubernetes.io/name: panda-factor
+    io.kompose.service: panda-factor

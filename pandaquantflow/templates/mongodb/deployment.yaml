@@ -5,18 +5,18 @@ metadata:
   name: panda-mongodb
   namespace: "{{ .Release.Namespace }}"
   labels:
-    app.kubernetes.io/name: panda-mongodb
+    io.kompose.service: panda-mongodb
 spec:
   replicas: 1
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      app.kubernetes.io/name: panda-mongodb
+      io.kompose.service: panda-mongodb
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: panda-mongodb
+        io.kompose.service: panda-mongodb
     spec:
       securityContext:
         fsGroup: 999
@@ -55,6 +55,11 @@ spec:
               port: {{ .Values.service.mongodbPort }}
             failureThreshold: 30
             periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.service.mongodbPort }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
           livenessProbe:
             tcpSocket:
               port: {{ .Values.service.mongodbPort }}
@@ -80,6 +85,8 @@ kind: Service
 metadata:
   name: panda-mongodb
   namespace: "{{ .Release.Namespace }}"
+  labels:
+    io.kompose.service: panda-mongodb
 spec:
   type: ClusterIP
   ports:
@@ -87,4 +94,4 @@ spec:
       port: {{ .Values.service.mongodbPort }}
       targetPort: {{ .Values.service.mongodbPort }}
   selector:
-    app.kubernetes.io/name: panda-mongodb
+    io.kompose.service: panda-mongodb
