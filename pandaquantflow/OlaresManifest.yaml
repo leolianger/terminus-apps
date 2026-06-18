@@ -20,6 +20,7 @@ entrances:
     icon: https://app.cdn.olares.com/appstore/freqtrade/icon.png
     authLevel: private
     openMethod: window
+    windowPushState: true
 
 spec:
   versionName: "1.0.0"
@@ -36,7 +37,8 @@ spec:
     - Panda Factor service (strategy/factor backend)
     - MongoDB (data persistence)
 
-    Open the app entrance to access the QuantFlow UI at `/quantflow/`.
+    Open the app from the desktop; the gateway serves the QuantFlow UI at `/`.
+    Direct API routes remain under `/api/`.
   developer: Panda
   website: https://example.com
   submitter: Olares
